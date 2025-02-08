@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Oxygen+Mono&display=swap');
+
+
+body {
+	background-color: #121212;
+	font-family: "Oxygen Mono", sans-serif, serif;
+}
+
+
+header {
+	text-align: center;
+	color: #f2f2f2;
+	font-size: 24px;
+	margin-top: 20px;
+}
+
+
+.cards {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 20px;
+	padding: 20px;
+}
+
+
+.cards a {
+	text-decoration: none;
+	color: inherit;
+}
+
+
+.card {
+	border: 1px solid #f2f2f2;
+	background-color: #f2f2f2;
+	border-radius: 16px;
+	box-shadow: 0px 0px 16px 10px #505050;
+	text-align: center;
+	padding: 10px;
+	margin: 50px;
+	cursor: pointer;
+}
+
+
+.card:hover {
+	transform: scale(1.05);
+}
+
+
+.card-title {
+	font-weight: bold;
+	font-size: 20px;
+	color: #1a1a1a;
+}
+
+
+.card-description {
+	color: #808080;
+	font-size: 16px;
+}
+
+
+@media (max-width: 900px) { 
+	.cards {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+
+@media (max-width: 600px) { 
+	.cards {
+		grid-template-columns: repeat(1, 1fr);
+	}
+}

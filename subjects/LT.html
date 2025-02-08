@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Cognis | LT</title>
+	<link rel="stylesheet" href="../assets/CSS/LT.css">
+</head>
+<body>
+	<header>
+		<h1>Language Theory</h1>
+	</header>
+	<div class="cards">
+		<div class="card" onclick="toggleDropdown('chapters')">
+			<p class="card-title">📖 Chapters</p>
+			<div class="dropdown" id="chapters">
+				<hr>
+				<p><a target="_blank" href="../subjects/note.html?subject=LT&file=Chapter1.md">Chapter 1</a></p>
+			</div>
+		</div>
+		<div class="card" onclick="toggleDropdown('exercises')">
+			<p class="card-title">✏️ Exercises</p>
+			<div class="dropdown" id="exercises">
+				<hr>
+			</div>
+		</div>
+		<div class="card" onclick="toggleDropdown('exams')">
+			<p class="card-title">✅ Exams</p>
+			<div class="dropdown" id="exams">
+				<hr>
+			</div>
+		</div>
+	</div>
+	<script src="../assets/js/script.js"></script>
+</body>
+</html>
