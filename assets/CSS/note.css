@@ -1,8 +1,86 @@
-@import url('https://fonts.googleapis.com/css2?family=Oxygen+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oxygen+Mono&family=Oxygen:wght@300;400;700&display=swap');
 
 
 body {
-	background-color: #121212;
-	font-family: "Oxygen Mono", sans-serif, serif;
-	color: #f2f2f2;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    font-family: 'Oxygen', sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+}
+
+
+header {
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+    background-color: #282828;
+}
+
+
+h1 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 0;
+}
+
+
+#note-content {
+    max-width: 900px;
+    width: 80%;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #252525;
+    border-radius: 8px;
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+
+p, ul, ol {
+    margin-bottom: 15px;
+}
+
+
+code {
+    background-color: #333;
+    padding: 4px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    color: #ffcc66;
+}
+
+
+pre {
+    background-color: #333;
+    padding: 10px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-family: monospace;
+}
+
+
+a {
+    color: #4aa8d8;
+    text-decoration: none;
+}
+
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+@media (max-width: 768px) {
+    #note-content {
+        font-size: 16px;
+        padding: 0 15px;
+    }
 }
