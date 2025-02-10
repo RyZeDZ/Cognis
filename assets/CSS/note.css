@@ -37,6 +37,7 @@ h1 {
     max-width: 900px;
     width: 80%;
     padding: 20px;
+    overflow-x: auto;
     margin-top: 20px;
     background-color: #252525;
     border-radius: 8px;
@@ -78,9 +79,35 @@ a:hover {
 }
 
 
+.MathJax_Display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+}
+
+
+mjx-container {
+    display: inline-block !important;
+    max-width: 100% !important;
+}
+
+
+
 @media (max-width: 768px) {
     #note-content {
-        font-size: 16px;
+        width: 95%;
+        font-size: 15px;
         padding: 0 15px;
+    }
+    
+
+    mjx-container {
+        font-size: 85% !important;
+    }
+    
+    
+    h1 {
+        font-size: 22px;
     }
 }
