@@ -93,6 +93,15 @@ mjx-container {
 }
 
 
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 15px auto;
+    border-radius: 6px;
+  }
+
+
 
 @media (max-width: 768px) {
     #note-content {
