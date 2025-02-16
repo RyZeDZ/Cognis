@@ -20,19 +20,31 @@
     <script async src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script>
         window.MathJax = {
+            loader: {load: ['[tex]/ams']},
             tex: {
+                packages: {'[+]': ['ams']},
                 displayMath: [['$$', '$$'], ['\\[', '\\]']],
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
                 processEscapes: true
             },
             chtml: {
-                scale: 0.9,
-                displayAlign: "center",
-                displayIndent: "0em"
+                scale: 1.0,
+                mtextInheritFont: true,
+                matchFontHeight: false,
+                adaptiveCSS: false
+            },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady().then(() => {
+                        if(window.innerWidth <= 768) {
+                            document.body.style.transform = 'scale(1)';
+                        }
+                    });
+                }
             }
         };
     </script>
-    <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 <body>
     <header>

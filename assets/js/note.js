@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    // ✅ Get file name and subject from URL parameters
     const params = new URLSearchParams(window.location.search);
     const noteFile = params.get("file");
     const subject = params.get("subject");
@@ -14,7 +13,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const md = window.markdownit();
 
-    // ✅ Fetch and render Markdown file
     fetch(`../assets/notes/${subject}/${noteFile}`)
         .then(response => {
             if (!response.ok) {
@@ -24,7 +22,11 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(markdown => {
             document.getElementById("note-content").innerHTML = md.render(markdown);
-            MathJax.typesetPromise();
+            setTimeout(() => {
+                MathJax.typesetPromise().catch(err => {
+                    console.log('MathJax typeset error:', err);
+                });
+            }, 100);
         })
         .catch(error => {
             document.getElementById("note-content").innerHTML = "<p>Error loading file.</p>";
