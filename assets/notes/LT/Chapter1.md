@@ -145,7 +145,7 @@ A **language** $L$ is a subset of $V^*$ (can be finite or infinite).
    - **Difference**: $L_1 - L_2 = \\{w \mid w \in L_1 \text{ and } w \notin L_2\\}$  
      - Example: $\\{a, b\\} - \\{b\\} = \\{a\\}$  
    - **Complement**: $\overline{L} = V^* \setminus L$  
-     - Example: $\overline{\\{a\\}} = V^* \setminus \\{a\\} = \\{\varepsilon, b, aa, ab, \ldots\\} \) (for \( V = \\{a, b\\} )$  
+     - Example: $\overline{\\{a\\}} = V^* \setminus \\{a\\} = \\{\varepsilon, b, aa, ab, \ldots\\} \)$  
 
 2. **Language-Specific Operations**:  
    - **Concatenation**: $L_1 \cdot L_2 = \\{uv \mid u \in L_1, v \in L_2\\}$.  
