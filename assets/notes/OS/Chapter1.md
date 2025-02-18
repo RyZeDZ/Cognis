@@ -46,3 +46,11 @@
   - Hierarchical file system.  
   - Treats devices as files for uniform access.  
   - Virtual memory support.  
+
+## 6. Roles of components
+- **Main Memory**: Holds instructions and data currently being used or processed by the CPU.  
+- **Processor (CPU)**: Responsible for performing calculations, executing instructions, and coordinating tasks between different components of the computer.  
+- **Control Unit (CU)**: Ensures that all the different parts of the processor work together and perform their tasks in the correct order.  
+- **Arithmetic and Logic Unit (ALU)**: Responsible for arithmetic and logical operations.
+- **Registers**: A small but fast storage unit inside the CPU.
+- **Buses**: Allows transfers of data between the components of the computer
