@@ -98,17 +98,17 @@ Repeat $w$ $n$ times.
 
 ### 2.6 Sub-Word Concepts  
 1. **Factor**: Contiguous subsequence (e.g., $ab$ in $aabba$).  
-   - **Proper Factor**: Factor ≠ $w$ and ≠ $\varepsilon$.  
    - Notation: $\text{Fact}(w)$.  
+   - **Proper Factor**: Factor ≠ $w$ and ≠ $\varepsilon$.  
 2. **Prefix**: Starting subsequence (e.g., $aa$ in $aabba$).  
-   - **Proper Prefix**: Prefix ≠ $w$ and ≠ $\varepsilon$.  
    - Notation: $\text{Pref}(w)$.  
+   - **Proper Prefix**: Prefix ≠ $w$ and ≠ $\varepsilon$.  
 3. **Suffix**: Ending subsequence (e.g., $ba$ in $aabba$).  
-   - **Proper Suffix**: Suffix ≠ $w$ and ≠ $\varepsilon$.  
    - Notation: $\text{Suff}(w)$.  
+   - **Proper Suffix**: Suffix ≠ $w$ and ≠ $\varepsilon$.  
 4. **Subword**: Non-contiguous subsequence preserving order (e.g., $aba$ in $abca$).  
-   - **Proper Subword**: Subword ≠ $w$ and ≠ $\varepsilon$.  
    - Notation: $\text{Subw}(w)$.  
+   - **Proper Subword**: Subword ≠ $w$ and ≠ $\varepsilon$.  
 
 **Examples**:  
 - For $w = \text{cognisontop}$ :  
@@ -122,6 +122,8 @@ Repeat $w$ $n$ times.
 1. **Primitive Word**: Cannot be written as $u^n$ for $n > 1$.  
    - Example: $ab$ (since $ab \neq u^2$ for any $u$).  
 2. **Periodic Word**: Repeats a primitive word (e.g., $abab = (ab)^2$).  
+3. **Conjugated Word**: The words $x$ and $y$ are conjugated if there exist words $u$ and $v$ such that $x = uv$ and $y = vu$ (e.g., $x = abc$ and $y = bca$ are conjugated because $x = uv$ and $y = vu$ where $u = a$ and $v = bc$).  
+
 
 ---
 
