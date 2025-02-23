@@ -7,11 +7,13 @@
     --border: #2A3B4F;
 }
 
+
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
 }
+
 
 body {
 	background-color: var(--primary);
@@ -54,7 +56,7 @@ nav {
 
 .hero h1 {
 	font-size: 4rem;
-	background: linear-gradient(45deg, var(--text) 60%, var(--accent));
+	background: linear-gradient(45deg, var(--text) 30%, var(--accent));
 	background-clip: text;
 	-webkit-background-clip: text;
 	color: transparent;
