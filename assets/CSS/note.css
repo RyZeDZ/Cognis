@@ -5,7 +5,7 @@ body {
     background-color: #1e1e1e;
     color: #e0e0e0;
     font-family: 'Oxygen', sans-serif;
-    font-size: 18px;
+    font-size: 1.2rem;
     line-height: 1.6;
     margin: 0;
     padding: 0;
@@ -26,7 +26,7 @@ header {
 
 
 h1 {
-    font-size: 28px;
+    font-size: 1.8rem;
     font-weight: bold;
     color: #ffffff;
     margin: 0;
@@ -87,6 +87,11 @@ a:hover {
 }
 
 
+mjx-math {
+    font-size: 1rem !important;
+}
+
+
 mjx-container {
     display: inline-block !important;
     max-width: 100% !important;
@@ -106,7 +111,7 @@ img {
 @media (max-width: 768px) {
     #note-content {
         width: 95%;
-        font-size: 15px;
+        font-size: 1rem;
         padding: 0 15px;
     }
     
@@ -117,6 +122,6 @@ img {
     
     
     h1 {
-        font-size: 22px;
+        font-size: 1.4rem;
     }
 }
