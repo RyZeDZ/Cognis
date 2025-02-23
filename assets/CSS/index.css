@@ -1,73 +1,201 @@
-@import url('https://fonts.googleapis.com/css2?family=Oxygen+Mono&display=swap');
+:root {
+	--primary: #0A0F14;
+    --accent: #4ECDC4;
+	--muted-accent: #8B98A6;
+    --text: #E3E9F1;
+    --card-bg: #1A1F26;
+    --border: #2A3B4F;
+}
+
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
 
 
 body {
-	background-color: #121212;
-	font-family: "Oxygen Mono", sans-serif, serif;
+	background-color: var(--primary);
+	color: var(--text);
+	font-family: "Inter", sans-serif;
+	line-height: 1.6;
 }
 
 
-header {
-	text-align: center;
-	color: #f2f2f2;
-	font-size: 24px;
-	margin-top: 20px;
+nav {
+	padding: 2rem 5%;
+	background: rgba(10, 15, 20, 0.95);
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+	backdrop-filter: blur(10px);
 }
 
 
-.cards {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 20px;
-	padding: 20px;
-}
-
-
-.cards a {
+.logo {
+	font-size: 2rem;
+	font-weight: 700;
+	color: var(--text);
 	text-decoration: none;
-	color: inherit;
 }
 
 
-.card {
-	border: 1px solid #f2f2f2;
-	background-color: #f2f2f2;
-	border-radius: 16px;
-	box-shadow: 0px 0px 16px 10px #505050;
+.logo span {
+	color: var(--accent);
+}
+
+
+.hero {
 	text-align: center;
-	padding: 10px;
-	margin: 50px;
+	padding: 8rem 5% 4rem;
+	position: relative;
+	overflow: hidden;
+}
+
+
+.hero h1 {
+	font-size: 4rem;
+	background: linear-gradient(45deg, var(--text) 30%, var(--accent));
+	background-clip: text;
+	-webkit-background-clip: text;
+	color: transparent;
+	-webkit-text-fill-color: transparent;
+	display: inline-block;
+}
+
+
+.slogan {
+	font-family: 'Space Mono', monospace;
+	font-style: italic;
+	color: var(--accent);
+	margin: 1rem 0 2rem;
+	font-size: 1.4rem;
+}
+
+
+.modules {
+	padding: 4rem 5%;
+	display: grid;
+	gap: 2rem;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+
+.module-card {
+	background: var(--card-bg);
+	padding: 2.5rem;
+	border-radius: 1rem;
+	border: 1px solid var(--border);
+	transition: transform 0.3s ease;
+	text-align: center;
+	position: relative;
+	overflow: hidden;
 	cursor: pointer;
 }
 
 
-.card:hover {
-	transform: scale(1.05);
+.module-card {
+	position: relative;
+	z-index: 2;
+    inset: 0;
+    display: block;
+    text-decoration: none;
+    color: inherit;
 }
 
 
-.card-title {
-	font-weight: bold;
-	font-size: 20px;
-	color: #1a1a1a;
+.module-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
 }
 
 
-.card-description {
-	color: #808080;
-	font-size: 16px;
+.module-card h3 {
+	color: var(--text);
 }
 
 
-@media (max-width: 900px) { 
-	.cards {
-		grid-template-columns: repeat(2, 1fr);
-	}
+.module-card p {
+	color: var(--muted-accent);
 }
 
 
-@media (max-width: 600px) { 
-	.cards {
-		grid-template-columns: repeat(1, 1fr);
-	}
+.module-card:hover {
+	transform: translateY(-5px);
+}
+
+
+.module-card i {
+	font-size: 2.5rem;
+	color: var(--accent);
+	margin-bottom: 1.5rem;
+	transition: transform 0.3s ease;
+}
+
+
+.module-card:hover i {
+	transform: rotate(15deg) scale(1.2);
+}
+
+
+.module-card::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 4px;
+	background: var(--accent);
+	transform: scaleX(0);
+	transition: transform 0.3s ease;
+}
+
+
+.module-card:hover::after {
+	transform: scaleX(1);
+}
+
+
+footer {
+	margin: 0 auto;
+	padding: 2rem 5%;
+	max-width: 1200px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+
+.footer-content {
+	max-width: 1200px;
+	margin: 0 auto;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+
+.separator {
+    color: var(--border);
+	padding: 1rem;
+}
+
+
+.github-link {
+	color: inherit;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	transition: opacity 0.3s ease;
+}
+
+
+.github-link:hover {
+	opacity: 0.8;
 }

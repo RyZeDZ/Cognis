@@ -13,36 +13,54 @@
 
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Cognis | LT</title>
-	<link rel="stylesheet" href="../assets/CSS/subjects.css">
+	<title>Chapters | LT</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+	<link rel="stylesheet" href="/assets/CSS/subjects.css">
 </head>
 <body>
+	<nav>
+		<div class="nav-content">
+			<a href="#" class="logo">Cognis<span>.</span></a>
+		</div>
+	</nav>
+
+	<p class="back"><a href="/index.html">&larr; Back to Home</a></p>
+
 	<header>
 		<h1>Language Theory</h1>
+		<p>Last updated: February 23, 2025</p>
 	</header>
-	<div class="cards">
-		<div class="card" onclick="toggleDropdown('chapters')">
-			<p class="card-title">📖 Chapters</p>
-			<div class="dropdown" id="chapters">
-				<hr>
-				<p><a target="_blank" href="../subjects/note.html?subject=LT&file=Chapter0.md">Chapter 0</a></p>
-				<p><a target="_blank" href="../subjects/note.html?subject=LT&file=Chapter1.md">Chapter 1</a></p>
-				<p><a target="_blank" href="../subjects/note.html?subject=LT&file=Chapter2.md">Chapter 2</a></p>
-			</div>
-		</div>
-		<div class="card" onclick="toggleDropdown('exercises')">
-			<p class="card-title">✏️ Exercises</p>
-			<div class="dropdown" id="exercises">
-				<hr>
-			</div>
-		</div>
-		<div class="card" onclick="toggleDropdown('exams')">
-			<p class="card-title">✅ Exams</p>
-			<div class="dropdown" id="exams">
-				<hr>
-			</div>
-		</div>
+
+	<div class="container">
+		<section class="card">
+			<i class="fa-solid fa-book-open"></i>
+			<h3>Chapters</h3>
+			<ul>
+				<li><a href="/subjects/note.html?subject=LT&file=Chapter0.md" target="_blank">Chapter 0: Mathematical Reminders</a></li>
+				<li><a href="/subjects/note.html?subject=LT&file=Chapter1.md" target="_blank">Chapter 1: Alphabets, Words, Languages</a></li>
+				<li><a href="/subjects/note.html?subject=LT&file=Chapter2.md" target="_blank">Chapter 2: Grammars</a></li>
+			</ul>
+		</section>
+
+
+		<section class="card">
+			<i class="fa-solid fa-toolbox"></i>
+			<h3>Resources</h3>
+			<ul>
+				<li><a href="#">Nothing yet :(</a></li>
+			</ul>
+		</section>
 	</div>
-	<script src="../assets/js/script.js"></script>
+
+	<footer>
+		<div class="footer-content">
+			<span>Made with ❤️</span>
+			<span class="separator"> | </span>
+			<a href="https://github.com/RyZeDZ/Cognis" class="github-link" target="_blank">
+				<i class="fa-brands fa-github"></i>
+				View Source
+			</a>
+		</div>
+	</footer>
 </body>
 </html>
