@@ -70,7 +70,7 @@ nav {
 	font-style: italic;
 	color: var(--accent);
 	margin: 1rem 0 2rem;
-	font-size: 1.2rem;
+	font-size: 1.4rem;
 }
 
 
@@ -93,6 +93,30 @@ nav {
 	text-align: center;
 	position: relative;
 	overflow: hidden;
+	cursor: pointer;
+}
+
+
+.module-card {
+	position: relative;
+	z-index: 2;
+    inset: 0;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+
+.module-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+
+.module-card h3 {
+	color: var(--text);
 }
 
 

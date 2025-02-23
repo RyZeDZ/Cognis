@@ -22,7 +22,7 @@ A **grammar** is a formal system for generating all valid strings (words) in a l
 
 ---
 
-# Chapter 2: Grammars (Revised)  
+# Chapter 2: Grammars  
 
 ---
 

@@ -88,7 +88,7 @@ a:hover {
 
 
 mjx-math {
-    font-size: 1rem !important;
+    font-size: 1.5rem !important;
 }
 
 
@@ -114,10 +114,10 @@ img {
         font-size: 1rem;
         padding: 0 15px;
     }
-    
 
-    mjx-container {
-        font-size: 85% !important;
+
+    mjx-math {
+        font-size: 1rem !important;
     }
     
     
