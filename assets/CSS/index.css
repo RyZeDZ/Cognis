@@ -74,7 +74,7 @@ nav {
 }
 
 
-.modules {
+.categories {
 	padding: 4rem 5%;
 	display: grid;
 	gap: 2rem;
@@ -84,7 +84,7 @@ nav {
 }
 
 
-.module-card {
+.category-card {
 	background: var(--card-bg);
 	padding: 2.5rem;
 	border-radius: 1rem;
@@ -94,10 +94,6 @@ nav {
 	position: relative;
 	overflow: hidden;
 	cursor: pointer;
-}
-
-
-.module-card {
 	position: relative;
 	z-index: 2;
     inset: 0;
@@ -107,7 +103,7 @@ nav {
 }
 
 
-.module-card::before {
+.category-card::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -115,22 +111,22 @@ nav {
 }
 
 
-.module-card h3 {
+.category-card h3 {
 	color: var(--text);
 }
 
 
-.module-card p {
+.category-card p {
 	color: var(--muted-accent);
 }
 
 
-.module-card:hover {
+.category-card:hover {
 	transform: translateY(-5px);
 }
 
 
-.module-card i {
+.category-card i {
 	font-size: 2.5rem;
 	color: var(--accent);
 	margin-bottom: 1.5rem;
@@ -138,12 +134,12 @@ nav {
 }
 
 
-.module-card:hover i {
+.category-card:hover i {
 	transform: rotate(15deg) scale(1.2);
 }
 
 
-.module-card::after {
+.category-card::after {
 	content: '';
 	position: absolute;
 	bottom: 0;
@@ -156,7 +152,7 @@ nav {
 }
 
 
-.module-card:hover::after {
+.category-card:hover::after {
 	transform: scaleX(1);
 }
 
@@ -198,4 +194,52 @@ footer {
 
 .github-link:hover {
 	opacity: 0.8;
+}
+
+
+.navigation {
+	display: flex;
+	gap: 5rem;
+	align-items: center;
+	justify-content: center;
+}
+
+
+.navigation a {
+	text-decoration: none;
+	border: 0.2rem solid var(--accent);
+	border-radius: 1.25rem;
+	width: 12rem;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+	font-weight: 700;
+}
+
+
+.modules-btn {
+	color: var(--primary);
+	background: var(--accent);
+}
+
+
+.guides-btn {
+	color: var(--accent);
+}
+
+
+.categories-separator {
+	max-width: 90%;
+	margin: 0 auto;
+	border: 2px solid var(--border);
+}
+
+
+@media (max-width: 768px) {
+	.navigation {
+		flex-direction: column;
+		gap: 3rem;
+	}
 }
