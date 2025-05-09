@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(markdown => {
             document.getElementById("note-content").innerHTML = md.render(markdown);
+            hljs.highlightAll();
             setTimeout(() => {
                 MathJax.typesetPromise().catch(err => {
                     console.log('MathJax typeset error:', err);
