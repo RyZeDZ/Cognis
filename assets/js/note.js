@@ -21,13 +21,16 @@ document.addEventListener("DOMContentLoaded", function () {
             return response.text();
         })
         .then(markdown => {
-            document.getElementById("note-content").innerHTML = md.render(markdown);
+            const content = md.render(markdown);
+            const container = document.getElementById("note-content");
+            container.innerHTML = content;
             hljs.highlightAll();
-            setTimeout(() => {
+            requestAnimationFrame(() => {
+                MathJax.typesetClear();
                 MathJax.typesetPromise().catch(err => {
                     console.log('MathJax typeset error:', err);
                 });
-            }, 100);
+            });
         })
         .catch(error => {
             document.getElementById("note-content").innerHTML = "<p>Error loading file.</p>";
