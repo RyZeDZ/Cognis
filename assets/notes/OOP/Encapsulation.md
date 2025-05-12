@@ -113,7 +113,7 @@ public class BankAccount {
     public BankAccount(String accountNumber, String ownerName) {
         this.accountNumber = accountNumber;
         this.ownerName = ownerName;
-        this.balance = balance;
+        this.balance = 0;
     }
     
     // Getters
