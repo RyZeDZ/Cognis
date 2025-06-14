@@ -1,0 +1,15 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-primary: #0a0f14;
+  --color-accent: #4ecdc4;
+  --color-muted-accent: #8b98a6;
+  --color-text: #e3e9f1;
+  --color-card-bg: #1a1f26;
+  --color-border: #2a3b4f;
+}
+
+html {
+  scroll-behavior: smooth;
+}
