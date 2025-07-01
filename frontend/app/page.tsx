@@ -1,29 +1,23 @@
-import { ChevronDown, Database } from "lucide-react";
-import type { Subject, Guide } from "../types";
-import { formatYear } from "../lib/utils";
+import type { Guide } from "../types";
 import { Fragment } from "react";
+import SubjectGrid from "./components/SubjectGrid";
 import Link from "next/link";
 import Image from "next/image";
 
-async function getSubjects() {
+async function getInitialSubjects() {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    const res = await fetch(`${apiUrl}/api/subjects`, {
-      cache: "no-store",
-    });
-    if (!res.ok) {
-      console.error("Failed to fetch subjects, status:", res.status);
-      return [];
-    }
+    const res = await fetch(`${apiUrl}/api/subjects`, { cache: "no-store" });
+    if (!res.ok) return [];
     return res.json();
   } catch (error) {
-    console.error("Network error fetching subjects:", error);
+    console.error("Failed to fetch initial subjects:", error);
     return [];
   }
 }
 
 export default async function HomePage() {
-  const subjects = await getSubjects();
+  const initialSubjects = await getInitialSubjects();
   const recentGuides: Guide[] = [
     {
       id: 1,
@@ -89,44 +83,7 @@ export default async function HomePage() {
         </div>
       </section>
       {/* --- SUBJECTS SECTION --- */}
-      <section
-        id="subjects"
-        className="container mx-auto px-4 py-12 scroll-mt-20 md:px-6"
-      >
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-            Subjects
-          </h1>
-          <div className="relative">
-            <button className="flex items-center gap-2 px-4 py-2 bg-card-bg border border-border rounded-md text-sm text-muted-accent hover:border-accent transition">
-              All Years
-              <ChevronDown size={16} />
-            </button>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {subjects.map((subject: Subject) => (
-            <Link
-              key={subject.id}
-              href={`/subjects/${subject.id}`}
-              className="group block p-6 bg-card-bg border border-border rounded-lg transition-all transform hover:border-accent hover:-translate-y-1"
-            >
-              <div className="mb-4">
-                <Database
-                  className="text-muted-accent group-hover:text-accent transition-colors"
-                  size={32}
-                />
-              </div>
-              <h2 className="text-lg font-semibold text-text mb-1">
-                {subject.name}
-              </h2>
-              <span className="text-xs px-2 py-1 bg-primary text-muted-accent rounded-full border border-border">
-                {formatYear(subject.year)}
-              </span>
-            </Link>
-          ))}
-        </div>
-      </section>
+      <SubjectGrid initialSubjects={initialSubjects} />
 
       {/* --- RECENT GUIDES SECTION --- */}
       <section className="container mx-auto px-4 py-12 md:px-6">

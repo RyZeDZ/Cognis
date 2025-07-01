@@ -19,3 +19,10 @@ export type Guide = {
   date: string;
   tag: string;
 };
+
+export type User = {
+  id: number;
+  email: string;
+  username: string;
+  is_admin: boolean;
+};

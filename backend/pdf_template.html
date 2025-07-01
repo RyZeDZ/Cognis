@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%; margin: 0; padding: 0">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cognis Document</title>
+    <script>
+      window.MathJax = {
+        tex: { inlineMath: [["$", "$"]], displayMath: [["$$", "$$"]] },
+      };
+    </script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+
+        margin: 0 !important;
+        padding-bottom: 60px !important;
+        background-color: #0a0f14;
+        color: #e3e9f1;
+        font-family: sans-serif;
+        line-height: 1.7;
+      }
+      body > div > :not(h1:first-child) {
+        padding-top: 20px;
+      }
+
+      .content-area {
+        flex-grow: 1;
+        padding: 2rem;
+      }
+      h1,
+      h2,
+      h3 {
+        color: #e3e9f1;
+        font-weight: 700;
+        margin-top: 1.5em;
+        margin-bottom: 0.5em;
+      }
+      code {
+        background-color: #1a1f26;
+        color: #4ecdc4;
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+      }
+      pre {
+        background-color: #1a1f26;
+        padding: 1em;
+        border-radius: 8px;
+      }
+
+      @page {
+        margin: 0;
+        padding-bottom: 70px;
+        padding-top: 30px;
+      }
+
+      .content-container {
+        padding: 40px 20px 0;
+        max-width: 800px;
+        margin: 0 auto;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="content-container">{content}</div>
+    <script>
+      hljs.highlightAll();
+    </script>
+  </body>
+</html>

@@ -1,24 +1,18 @@
-// frontend/app/subjects/[id]/chapters/[chapterId]/page.tsx
-// --- FULL, CORRECTED FILE ---
-
 "use client";
 
 import { useEffect, useState, use } from "react";
 import Link from "next/link";
-import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeHighlight from "rehype-highlight";
-import { Loader2, PanelLeft, PanelRight } from "lucide-react";
+import { Download, Loader2, PanelLeft, PanelRight } from "lucide-react";
 import type { Subject, Chapter } from "@/types";
 import { slugify, getHeadingsFromMarkdown } from "@/lib/utils";
 import { useSidebarStore } from "@/store/sidebarStore";
+import MarkdownRenderer from "@/app/components/MarkdownRenderer";
 
 import "highlight.js/styles/github-dark.css";
 
 type PageProps = { params: Promise<{ id: string; chapterId: string }> };
 type PageData = { subject: Subject; chapter: Chapter & { content: string } };
 
-// --- Reusable Sidebar Content ---
 function SidebarContent({
   subject,
   activeChapterId,
@@ -77,13 +71,13 @@ function SidebarContent({
   );
 }
 
-let pageData: PageData; // Define pageData outside the component
+let pageData: PageData;
 
-// --- Main Page Component ---
 export default function ChapterViewPage({ params }: PageProps) {
   const { id, chapterId } = use(params);
   const [localPageData, setPageData] = useState<PageData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDownloading, setIsDownloading] = useState(false);
   const {
     isOpen: isSidebarOpen,
     toggle: toggleSidebar,
@@ -107,7 +101,7 @@ export default function ChapterViewPage({ params }: PageProps) {
 
         const data = { subject: subjectData, chapter: currentChapter };
         setPageData(data);
-        pageData = data; // Assign to the outer scope variable
+        pageData = data;
       } catch (err) {
         console.error(err);
         setPageData(null);
@@ -117,6 +111,41 @@ export default function ChapterViewPage({ params }: PageProps) {
     }
     fetchData();
   }, [id, chapterId]);
+
+  const handleDownload = async () => {
+    if (!pageData) return;
+
+    setIsDownloading(true);
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/api/utils/generate-pdf`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          markdown_content: pageData.chapter.content,
+          title: pageData.chapter.title,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("PDF generation failed.");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${pageData.chapter.title}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download failed", error);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -173,23 +202,25 @@ export default function ChapterViewPage({ params }: PageProps) {
 
         {/* Main Content */}
         <main className="flex-grow p-4 md:p-8 w-full">
-          <article className="prose prose-invert max-w-none">
-            <h1 id={slugify(chapter.title)}>{chapter.title}</h1>
-            <Markdown
-              remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeHighlight]}
-              components={{
-                h2: ({ node, ...props }) => (
-                  <h2
-                    id={slugify(props.children?.toString() || "")}
-                    {...props}
-                  ></h2>
-                ),
-              }}
+          {/* Title and Download Button */}
+          <div className="flex items-center gap-4 mb-6">
+            <h1 className="prose prose-invert text-4xl font-bold">
+              {chapter.title}
+            </h1>
+            <button
+              onClick={handleDownload}
+              disabled={isDownloading}
+              className="flex-shrink-0 p-2 text-muted-accent border border-border rounded-full hover:bg-border hover:text-accent disabled:opacity-50 disabled:cursor-wait transition-colors"
+              title="Download as PDF" // Tooltip for accessibility
             >
-              {chapter.content}
-            </Markdown>
-          </article>
+              {isDownloading ? (
+                <Loader2 className="animate-spin" size={20} />
+              ) : (
+                <Download size={20} />
+              )}
+            </button>
+          </div>
+          <MarkdownRenderer content={chapter.content} />
         </main>
       </div>
     </>
