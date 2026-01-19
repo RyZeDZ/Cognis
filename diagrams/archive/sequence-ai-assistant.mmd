@@ -1,0 +1,38 @@
+sequenceDiagram
+    actor User
+    participant FE as Frontend (Next.js)
+    participant BE as Backend (FastAPI)
+    participant Gemini as Google Gemini API
+
+    %% Style the participants for clarity
+    participant User as User
+    participant FE as Frontend (Next.js)
+    participant BE as Backend (FastAPI)
+    participant Gemini as Google Gemini API
+
+    alt Highlight-to-Explain
+        User->>FE: 1. Highlights text on a page
+        FE-->>User: 2. Shows "[Explain with AI]" popover
+        User->>FE: 3. Clicks the button
+    else Direct Chat
+        User->>FE: 1. Opens chat & sends a question
+    end
+
+    FE->>BE: 4. POST /api/ai/chat (query, context)
+    activate BE
+    
+    note right of BE: RAG Process Starts
+    
+    BE->>BE: 5. Retrieve relevant data from DB
+    
+    BE->>Gemini: 6. Generate explanation (prompt + data + query)
+    activate Gemini
+    Gemini-->>BE: 7. Return generated text
+    deactivate Gemini
+    
+    note right of BE: RAG Process Ends
+    
+    BE-->>FE: 8. Send AI response to Frontend
+    deactivate BE
+
+    FE-->>User: 9. Display AI response in chat window

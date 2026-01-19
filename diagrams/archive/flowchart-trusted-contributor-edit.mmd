@@ -1,0 +1,16 @@
+graph TD
+    %% --- Style Definitions ---
+    classDef userAction fill:#D6EAF8,stroke:#3498DB,stroke-width:2px,color:#212F3D
+    classDef systemProcess fill:#E5E7E9,stroke:#808B96,stroke-width:2px,color:#212F3D
+    classDef successState fill:#D5F5E3,stroke:#2ECC71,stroke-width:2px,color:#212F3D
+    classDef specialUser fill:#E8DAEF,stroke:#8E44AD,stroke-width:2px,color:#212F3D
+
+    %% --- The Flow ---
+    A(fa:fa-file-alt Trusted Contributor<br/>views a page):::specialUser --> B(fa:fa-mouse-pointer Clicks 'Suggest an Edit'):::specialUser
+    B --> C(fa:fa-keyboard Makes changes &<br/>clicks 'Publish Changes'):::specialUser
+    
+    C --> D["fa:fa-shield-halved System:<br/>- Checks user role<br/>- Confirms 'Trusted' status"]:::systemProcess
+    
+    D --> E["fa:fa-rocket System:<br/>- Bypasses Admin Queue<br/>- Publishes content directly"]:::systemProcess
+    
+    E --> F((fa:fa-check-circle Success!<br/>Changes are live instantly)):::successState

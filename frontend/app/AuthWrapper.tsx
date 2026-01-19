@@ -13,8 +13,7 @@ async function getUserData(token: string | undefined): Promise<User | null> {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      cache: "force-cache",
-      next: { tags: ["user"] },
+      cache: "no-store",
     });
 
     if (response.ok) {

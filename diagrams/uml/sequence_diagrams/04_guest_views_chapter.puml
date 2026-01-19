@@ -1,0 +1,31 @@
+@startuml GuestViewsChapter
+' --- DIAGRAM METADATA ---
+title "Sequence Diagram: Guest Views a Chapter"
+
+' --- PARTICIPANTS ---
+actor Guest
+participant "Frontend (Next.js)" as Frontend
+participant "Backend (FastAPI)" as Backend
+
+' --- INITIAL STATE ---
+ref over Guest, Frontend, Backend : Guest is on the Subject Detail page
+
+' --- FLOW OF EVENTS ---
+Guest -> Frontend: Clicks on a chapter title (e.g., "Introduction to Algorithms")
+activate Frontend
+
+Frontend -> Frontend: Navigates to route '/subjects/{subjectId}/chapters/{chapterId}'
+
+Frontend -> Backend: GET /api/chapters/{chapterId}
+activate Backend
+
+Backend -> Backend: Calls crud.get_chapter_by_id(id=chapterId)
+note right of Backend: Fetches the specific chapter details.
+
+Backend --> Frontend: 200 OK [Chapter Object with content]
+deactivate Backend
+
+Frontend --> Guest: Renders the Chapter page, displaying the title and content.
+deactivate Frontend
+
+@enduml

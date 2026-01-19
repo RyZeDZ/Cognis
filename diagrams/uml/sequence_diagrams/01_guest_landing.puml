@@ -1,0 +1,43 @@
+@startuml GuestLanding
+' --- DIAGRAM METADATA ---
+title "Sequence Diagram: Guest Lands on Home Page"
+
+' --- PARTICIPANTS ---
+actor Guest
+participant "Frontend (Next.js)" as Frontend
+participant "Backend (FastAPI)" as Backend
+
+' --- FLOW OF EVENTS ---
+Guest -> Frontend: Navigates to Home Page (/)
+activate Frontend
+
+par 
+    Frontend -> Backend: GET /api/users/me
+    activate Backend
+    
+    alt User is NOT Authenticated (Guest)
+        Backend --> Frontend: 401 Unauthorized
+    else User IS Authenticated
+        Backend --> Frontend: 200 OK [User Object]
+    end
+    deactivate Backend
+
+else
+
+    Frontend -> Backend: GET /api/subjects/top
+    activate Backend
+    Backend --> Frontend: 200 OK [List of Subjects]
+    deactivate Backend
+    
+else
+
+    Frontend -> Backend: GET /api/guides/top
+    activate Backend
+    Backend --> Frontend: 200 OK [List of Guides]
+    deactivate Backend
+end
+
+Frontend --> Guest: Renders Home Page with content and conditional UI
+deactivate Frontend
+
+@enduml

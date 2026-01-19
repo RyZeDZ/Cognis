@@ -1,0 +1,38 @@
+graph LR
+    %% --- Style Definitions ---
+    classDef done fill:#D5F5E3,stroke:#2ECC71,stroke-width:2px,color:#212F3D
+    classDef progress fill:#FEF9E7,stroke:#F1C40F,stroke-width:2px,color:#212F3D
+    classDef todo fill:#EBF5FB,stroke:#3498DB,stroke-width:2px,color:#212F3D
+    classDef backlog fill:#FADBD8,stroke:#E74C3C,stroke-width:2px,color:#212F3D
+
+    %% --- The Tree Structure ---
+    A((🌳<br/>Cognis<br/>Platform))
+
+    subgraph Milestones
+        A --> v01("✅ v0.1<br/>Core Engine"):::done
+        A --> v02("✅ v0.2<br/>Interactive User"):::done
+        A --> v03("🚧 v0.3<br/>Polished Contributor"):::progress
+        A --> v04("⬜ v0.4<br/>The AI Brain"):::todo
+        A --> v10("⬜ v1.0<br/>Gamified Platform"):::todo
+        A --> bl("💡<br/>Backlog &<br/>Idea Bin"):::backlog
+    end
+
+    subgraph v0.3 Features
+        v03 --> v03_F1("⬜ Admin Content<br/>(Final Touches)"):::progress
+        v03 --> v03_F2("⬜ Image Tracking<br/>& Deletion"):::progress
+        v03 --> v03_F3("⬜ Admin Preview Page"):::progress
+        v03 --> v03_F4("⬜ 'Suggest New<br/>Chapter' Flow"):::progress
+    end
+    
+    subgraph v0.3_F1 Tasks
+        v03_F1 --> v03_T1("Task:<br/>Subject Endpoints"):::progress
+        v03_F1 --> v03_T2("Task:<br/>Wire up UI buttons"):::progress
+    end
+
+    subgraph Backlog Items
+        bl --> bl_bugs("🔥 High Priority Bugs"):::backlog
+        bl --> bl_imp("🛠️ Medium Priority<br/>Improvements"):::backlog
+        
+        bl_bugs --> T_bug1("Fix 'Suggest an<br/>Edit' preview"):::backlog
+        bl_imp --> T_imp1("Improve PDF<br/>utility"):::backlog
+    end

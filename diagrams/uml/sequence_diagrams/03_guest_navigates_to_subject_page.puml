@@ -1,0 +1,32 @@
+@startuml GuestNavigatesToSubject
+' --- DIAGRAM METADATA ---
+title "Sequence Diagram: Guest Navigates to a Subject Page"
+
+' --- PARTICIPANTS ---
+actor Guest
+participant "Frontend (Next.js)" as Frontend
+participant "Backend (FastAPI)" as Backend
+
+' --- INITIAL STATE ---
+ref over Guest, Frontend, Backend : Guest is on the Home Page
+
+' --- FLOW OF EVENTS ---
+Guest -> Frontend: Clicks on a subject card (e.g., "Computer Architecture")
+activate Frontend
+
+Frontend -> Frontend: Navigates to route '/subjects/{subjectId}'
+note right of Frontend: Next.js Router handles the client-side navigation.
+
+Frontend -> Backend: GET /api/subjects/{subjectId}
+activate Backend
+
+Backend -> Backend: Calls crud.get_subject_details(id=subjectId)
+note right of Backend: Fetches subject details and eagerly loads its associated content (chapters, exams, etc.) that have status = 'approved'.
+
+Backend --> Frontend: 200 OK [Subject with approved content]
+deactivate Backend
+
+Frontend --> Guest: Renders the Subject Detail page with all its public content.
+deactivate Frontend
+
+@enduml

@@ -1,0 +1,4 @@
+flowchart TD
+    A[Admin views all tags] --> B[Toggle primary flag]
+    B -->|primary=True| C[Tag shows in main filter UI]
+    B -->|primary=False| D[Tag only used internally/search]

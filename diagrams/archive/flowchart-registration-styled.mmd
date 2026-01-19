@@ -1,0 +1,27 @@
+graph TD
+    %% --- Style Definitions ---
+    classDef userAction fill:#D6EAF8,stroke:#3498DB,stroke-width:2px,color:#212F3D
+    classDef systemProcess fill:#E5E7E9,stroke:#808B96,stroke-width:2px,color:#212F3D
+    classDef decision fill:#FCF3CF,stroke:#F1C40F,stroke-width:2px,color:#212F3D
+    classDef successState fill:#D5F5E3,stroke:#2ECC71,stroke-width:2px,color:#212F3D
+    classDef pendingState fill:#FDEDEC,stroke:#E74C3C,stroke-width:2px,color:#212F3D
+
+    %% --- The Flow ---
+    %% Start with a stadium shape for the initial action
+    A(fa:fa-user-plus Register Clicked):::userAction --> B{fa:fa-question-circle Choose Method}:::decision
+
+    %% Path 1: Google (The Fast Lane)
+    B -- Google --> C(fab:fa-google Login with Google):::userAction
+    C --> D["fa:fa-cogs System:<br/>Creates Verified User"]:::systemProcess
+    
+    %% Path 2: Email (The Scenic Route)
+    B -- Email/Password --> F(fa:fa-keyboard Submit Form):::userAction
+    F --> G["fa:fa-cog System: Create Unverified User<br/>fa:fa-paper-plane Send Verification Email"]:::systemProcess
+    G --> H(fa:fa-eye See 'Please Verify' Banner):::pendingState
+    H --> I(fa:fa-envelope Click Verification Link):::userAction
+    I --> J["fa:fa-shield-halved System:<br/>Secure & Verify Account"]:::systemProcess
+
+    %% The two paths merge to the same successful outcome
+    %% Using a circle for the final state
+    D --> Z((fa:fa-check-circle Success!<br/>User is Verified)):::successState
+    J --> Z

@@ -1,0 +1,29 @@
+@startuml UserStartsNewChapter
+' --- DIAGRAM METADATA ---
+title "Sequence Diagram: User Starts a New Chapter Contribution"
+
+' --- PARTICIPANTS ---
+actor User
+participant "Frontend (Next.js)" as Frontend
+
+' --- INITIAL STATE ---
+ref over User, Frontend: User is on the Subject Detail page and authenticated.
+
+' --- FLOW OF EVENTS ---
+User -> Frontend: Clicks "Add Content" button
+activate Frontend
+Frontend --> User: Opens "AddContentModal.tsx"
+
+User -> Frontend: Clicks the "Suggest new chapter" button/select option
+note right of Frontend: The button contains a link to the contribution page.
+
+Frontend -> Frontend: Navigates to route '/contribute/new-chapter/{subjectId}'
+
+Frontend --> User: Renders the dedicated New Chapter Editor page.
+deactivate Frontend
+note over User, Frontend: The user is now on a new page with a form for Chapter Title and a rich text editor for the content.
+
+' --- LINK TO NEXT JOURNEY ---
+ref over User, Frontend: The process of actually *submitting* the new chapter will be detailed in a separate diagram.
+
+@enduml

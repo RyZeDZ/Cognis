@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { ChevronDown, Database, Loader2 } from "lucide-react";
 import type { Subject } from "@/types";
@@ -15,28 +15,29 @@ export default function SubjectGrid({
   const [selectedYear, setSelectedYear] = useState<number | "all">("all");
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchSubjectsByYear = async (year: number) => {
-      setIsLoading(true);
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/subjects?year=${year}`;
-      try {
-        const res = await fetch(url, { cache: "no-store" });
-        const data = await res.json();
-        setSubjects(data);
-      } catch (error) {
-        console.error(error);
-        setSubjects([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchSubjectsByYear = useCallback(async (year: number) => {
+    setIsLoading(true);
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/subjects?year=${year}`;
+    try {
+      const res = await fetch(url);
+      setSubjects(await res.json());
+    } catch (error) {
+      console.error(error);
+      setSubjects([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
+  useEffect(() => {
     if (selectedYear === "all") {
+      // If user selects "All Years", reset to the initial Top 6 subjects
       setSubjects(initialSubjects);
     } else {
+      // If user selects a specific year, fetch only those subjects
       fetchSubjectsByYear(selectedYear);
     }
-  }, [selectedYear, initialSubjects]);
+  }, [selectedYear, initialSubjects, fetchSubjectsByYear]); // Correct dependency array
 
   const years = [1, 2, 3, 4, 5];
 

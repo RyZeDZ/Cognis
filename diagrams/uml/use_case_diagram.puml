@@ -1,0 +1,48 @@
+@startuml use_case_diagram
+
+' --- ACTORS ---
+actor Guest
+actor User
+actor Admin
+
+' --- RELATIONSHIPS ---
+User --|> Guest
+Admin --|> User
+
+' --- SYSTEM BOUNDARY ---
+rectangle "Cognis" {
+
+  ' --- GUEST USE CASES ---
+  usecase "Browse & View Content" as UC_VIEW
+  usecase "Register for Account" as UC_REGISTER
+  usecase "Log In" as UC_LOGIN
+
+  ' --- USER-SPECIFIC USE CASES ---
+  usecase "Submit New Content" as UC_SUBMIT
+  usecase "Suggest Edits" as UC_SUGGEST_EDIT
+  usecase "Manage Own Profile" as UC_MANAGE_PROFILE
+  usecase "View Notifications" as UC_NOTIFICATIONS
+
+  ' --- ADMIN-SPECIFIC USE CASES ---
+  usecase "Review Submissions" as UC_REVIEW
+  usecase "Approve/Reject Content" as UC_APPROVE_REJECT
+  usecase "Manage Subjects" as UC_MANAGE_SUBJECTS
+  usecase "Manage Users" as UC_MANAGE_USERS
+}
+
+' --- ASSOCIATIONS ---
+Guest -- UC_VIEW
+Guest -- UC_REGISTER
+Guest -- UC_LOGIN
+
+User -- UC_SUBMIT
+User -- UC_SUGGEST_EDIT
+User -- UC_MANAGE_PROFILE
+User -- UC_NOTIFICATIONS
+
+Admin -- UC_REVIEW
+Admin -- UC_APPROVE_REJECT
+Admin -- UC_MANAGE_SUBJECTS
+Admin -- UC_MANAGE_USERS
+
+@enduml

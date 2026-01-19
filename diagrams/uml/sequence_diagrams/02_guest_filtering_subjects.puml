@@ -1,0 +1,32 @@
+@startuml GuestFilteringSubjects
+' --- DIAGRAM METADATA ---
+title "Sequence Diagram: Guest Filters Subjects on Home Page"
+
+' --- PARTICIPANTS ---
+actor Guest
+participant "Frontend (Next.js)" as Frontend
+participant "Backend (FastAPI)" as Backend
+
+' --- INITIAL STATE ---
+ref over Guest, Frontend, Backend : Guest is on the Home Page (from 01_guest_landing)
+
+' --- FLOW OF EVENTS ---
+Guest -> Frontend: Clicks subject year filter, selects a year
+activate Frontend
+
+alt User selects a specific year (e.g., "L2")
+    Frontend -> Backend: GET /api/subjects?year=2
+    activate Backend
+    
+    Backend --> Frontend: 200 OK [Filtered list of subjects]
+    deactivate Backend
+
+else User selects "All Years"
+    Frontend -> Frontend: Uses cached subject data from initial page load
+    note right of Frontend: No new API call is made.
+end
+
+Frontend --> Guest: Updates the "Subjects" section with the new list
+deactivate Frontend
+
+@enduml

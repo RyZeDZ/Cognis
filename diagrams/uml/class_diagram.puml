@@ -1,0 +1,130 @@
+@startuml class_diagram
+
+' Hiding empty members for a cleaner look.
+hide empty members
+
+' --- ENUMS ---
+enum RequestStatus {
+  pending
+  approved
+  rejected
+}
+
+' --- ENTITY CLASSES ---
+class User {
+  +id: int
+  +google_id: string <<nullable>>
+  +email: string
+  +username: string
+  -password: string
+  -password_reset_token: string <<nullable>>
+  -password_reset_expires: datetime <<nullable>>
+  +is_admin: bool
+  +profile_image_url: string <<nullable>>
+}
+
+class Subject {
+  +id: int
+  +name: string
+  +year: int
+  +specialization: string <<nullable>>
+  +visit_count: int
+}
+
+class Chapter {
+  +id: int
+  +title: string
+  +content: text
+  +status: RequestStatus
+  +created_at: datetime
+}
+
+class Exam {
+  +id: int
+  +title: string
+  +file_url: string
+  +status: RequestStatus
+  +created_at: datetime
+}
+
+class Resource {
+  +id: int
+  +title: string
+  +link_url: string
+  +description: text <<nullable>>
+  +status: RequestStatus
+  +created_at: datetime
+}
+
+class ModificationRequest {
+  +id: int
+  +proposed_title: string
+  +proposed_content: text
+  +status: RequestStatus
+  +created_at: datetime
+  +reviewed_at: datetime <<nullable>>
+  +reviewer_comment: text <<nullable>>
+}
+
+class Notification {
+  +id: int
+  +message: string
+  +link: string <<nullable>>
+  +is_read: bool
+  +created_at: datetime
+}
+
+class UploadedImage {
+  +id: int
+  +public_url: string
+  -storage_path: string
+  +created_at: datetime
+}
+
+class Guide {
+  +id: int
+  +title: string
+  +content: text
+  +created_at: datetime
+  +last_modified: datetime <<nullable>>
+}
+
+class Tag {
+  +id: int
+  +title: string
+  +primary: bool
+}
+
+' --- ASSOCIATIONS ---
+
+' User relationships
+User "1" -- "0..*" Chapter : creates >
+User "1" -- "0..*" Exam : submits >
+User "1" -- "0..*" Resource : submits >
+User "1" -- "0..*" ModificationRequest : submits >
+User "1" -- "0..*" Notification : receives >
+User "1" -- "0..*" UploadedImage : uploads >
+User "1" -- "0..*" Guide : authors >
+
+' Subject relationships
+Subject "1" -- "0..*" Chapter : contains >
+Subject "1" -- "0..*" Exam : contains >
+Subject "1" -- "0..*" Resource : contains >
+
+' Chapter relationships
+Chapter "1" -- "0..*" ModificationRequest : has >
+Chapter "1" -- "0..*" UploadedImage : contains >
+
+' Guide relationship
+Guide "1" -- "0..*" UploadedImage : contains >
+
+' --- MANY-TO-MANY RELATIONSHIP ---
+class GuideTag <<association>> {
+  ' Has no attributes of its own, but it connects the two.
+}
+(Guide, Tag) .. GuideTag
+GuideTag ..> Guide : guide_id
+GuideTag ..> Tag : tag_id
+
+
+@enduml

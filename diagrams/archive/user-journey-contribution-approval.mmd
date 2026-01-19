@@ -1,0 +1,31 @@
+graph TD
+    %% --- Style Definitions ---
+    classDef userAction fill:#D6EAF8,stroke:#3498DB,stroke-width:2px,color:#212F3D
+    classDef adminAction fill:#FADBD8,stroke:#E74C3C,stroke-width:2px,color:#212F3D
+    classDef systemProcess fill:#E5E7E9,stroke:#808B96,stroke-width:2px,color:#212F3D
+    classDef decision fill:#FCF3CF,stroke:#F1C40F,stroke-width:2px,color:#212F3D
+
+    %% --- Contributor's Sub-Process ---
+    subgraph Contributor
+        A[Visits a View Page] --> B[Clicks 'Suggest an Edit']
+        B --> C[Redirected to Edit Page]
+        C --> D[Makes changes & clicks 'Submit for Review']
+        D --> E[Receives 'Suggestion Submitted' confirmation]
+    end
+    
+    %% Assign styles to Contributor nodes
+    class A,B,C,D,E userAction
+
+    %% --- Admin's Sub-Process ---
+    subgraph Admin
+        F[Submission appears in Review Queue]:::systemProcess --> G[Admin opens the queue and selects the submission]:::adminAction
+        G --> H{Is the edit high quality?}:::decision
+        H -- Yes --> I[Clicks 'Approve & Publish']:::adminAction
+        I --> J["System:<br/>- Updates live content<br/>- Awards points<br/>- Sends 'Approved' notification"]:::systemProcess
+        
+        H -- No --> K[Clicks 'Reject']:::adminAction
+        K --> L["System:<br/>- Marks as 'Rejected'<br/>- Sends 'Rejected' notification"]:::systemProcess
+    end
+
+    %% --- Linking the two processes ---
+    E --> F

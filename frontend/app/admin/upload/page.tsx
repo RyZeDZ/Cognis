@@ -1,182 +1,105 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-
-type FormMode = "newSubject" | "newChapter";
+import { useState, useEffect, useMemo } from "react";
+import type { Subject } from "@/types";
+import { Book, PlusCircle, FileText } from "lucide-react";
+import * as Tabs from "@radix-ui/react-tabs";
+import AddChapterForm from "./components/AddChapterForm";
+import CreateSubjectForm from "./components/CreateSubjectForm";
 
 export default function AdminUploadPage() {
-  const router = useRouter();
+  const [allSubjects, setAllSubjects] = useState<Subject[]>([]);
+  const [activeMode, setActiveMode] = useState("addChapter");
 
-  const [subjectName, setSubjectName] = useState("");
-  const [subjectYear, setSubjectYear] = useState(1);
-  const [subjectSpecialization, setSubjectSpecialization] = useState("");
-  const [chapterTitle, setChapterTitle] = useState("");
-  const [chapterContent, setChapterContent] = useState("");
+  const [filterYear, setFilterYear] = useState<string>("1");
 
-  const [mode, setMode] = useState<FormMode>("newSubject");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  useEffect(() => {
+    const fetchAllSubjects = async () => {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const res = await fetch(`${apiUrl}/api/subjects`);
+      setAllSubjects(await res.json());
+    };
+    fetchAllSubjects();
+  }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-    setSuccess(null);
-
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
-    try {
-      // We use the new convenience endpoint we created
-      const response = await fetch(`${apiUrl}/api/new-subject-with-chapter`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          subject_name: subjectName,
-          subject_year: subjectYear,
-          subject_specialization: subjectSpecialization || null,
-          chapter_title: chapterTitle,
-          chapter_content: chapterContent,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "An error occurred.");
-      }
-
-      const newSubject = await response.json();
-      setSuccess(`Successfully created subject "${newSubject.name}"!`);
-      router.push(`/subjects/${newSubject.id}`);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An unknown error");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const filteredSubjects = useMemo(() => {
+    return allSubjects.filter(
+      (subject) => subject.year.toString() === filterYear
+    );
+  }, [allSubjects, filterYear]);
 
   return (
-    <div className="container mx-auto max-w-2xl px-4 py-12">
-      <h1 className="text-4xl font-bold text-center mb-8">
-        Admin Content Uploader
-      </h1>
+    <div className="container mx-auto max-w-4xl px-4 py-12">
+      <div className="text-center mb-10">
+        <h1 className="text-4xl font-bold">Upload Content</h1>
+        <p className="text-muted-accent mt-2">
+          Contribute to the Cognis platform by creating new content.
+        </p>
+      </div>
 
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-6 bg-card-bg p-8 rounded-lg border border-border"
+      <Tabs.Root
+        value={activeMode}
+        onValueChange={setActiveMode}
+        className="w-full"
       >
-        <h2 className="text-2xl font-semibold text-accent">
-          Create New Subject with First Chapter
-        </h2>
-
-        {/* --- Subject Fields --- */}
-        <div>
-          <label
-            htmlFor="subjectName"
-            className="block text-sm font-medium text-muted-accent mb-1"
+        <Tabs.List className="flex flex-wrap border-b border-border mb-8">
+          <Tabs.Trigger
+            value="addChapter"
+            className="data-[state=active]:border-accent data-[state=active]:text-accent text-muted-accent border-b-2 border-transparent px-4 py-2 flex items-center gap-2 text-sm font-medium transition-colors"
           >
-            Subject Name
-          </label>
-          <input
-            id="subjectName"
-            type="text"
-            value={subjectName}
-            onChange={(e) => setSubjectName(e.target.value)}
-            required
-            className="w-full bg-primary border border-border rounded-md px-3 py-2 focus:ring-accent focus:border-accent"
-          />
-        </div>
-
-        <div className="flex gap-4">
-          <div className="flex-1">
-            <label
-              htmlFor="subjectYear"
-              className="block text-sm font-medium text-muted-accent mb-1"
-            >
-              Year (1-5)
-            </label>
-            <input
-              id="subjectYear"
-              type="number"
-              min="1"
-              max="5"
-              value={subjectYear}
-              onChange={(e) => setSubjectYear(parseInt(e.target.value))}
-              required
-              className="w-full bg-primary border border-border rounded-md px-3 py-2 focus:ring-accent focus:border-accent"
-            />
-          </div>
-          <div className="flex-1">
-            <label
-              htmlFor="subjectSpecialization"
-              className="block text-sm font-medium text-muted-accent mb-1"
-            >
-              Specialization (e.g., SI)
-            </label>
-            <input
-              id="subjectSpecialization"
-              type="text"
-              placeholder="Leave empty for none"
-              value={subjectSpecialization}
-              onChange={(e) => setSubjectSpecialization(e.target.value)}
-              className="w-full bg-primary border border-border rounded-md px-3 py-2 focus:ring-accent focus:border-accent"
-            />
-          </div>
-        </div>
-
-        <hr className="border-border" />
-
-        {/* --- Chapter Fields --- */}
-        <div>
-          <label
-            htmlFor="chapterTitle"
-            className="block text-sm font-medium text-muted-accent mb-1"
+            <PlusCircle size={16} /> Add Chapter to Subject
+          </Tabs.Trigger>
+          <Tabs.Trigger
+            value="newSubject"
+            className="data-[state=active]:border-accent data-[state=active]:text-accent text-muted-accent border-b-2 border-transparent px-4 py-2 flex items-center gap-2 text-sm font-medium transition-colors"
           >
-            First Chapter Title
-          </label>
-          <input
-            id="chapterTitle"
-            type="text"
-            value={chapterTitle}
-            onChange={(e) => setChapterTitle(e.target.value)}
-            required
-            className="w-full bg-primary border border-border rounded-md px-3 py-2 focus:ring-accent focus:border-accent"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="chapterContent"
-            className="block text-sm font-medium text-muted-accent mb-1"
+            <Book size={16} /> Create New Subject
+          </Tabs.Trigger>
+          <Tabs.Trigger
+            value="newGuide"
+            className="data-[state=active]:border-accent data-[state=active]:text-accent text-muted-accent border-b-2 border-transparent px-4 py-2 flex items-center gap-2 text-sm font-medium transition-colors"
           >
-            Chapter Content (Markdown)
-          </label>
-          <textarea
-            id="chapterContent"
-            rows={15}
-            value={chapterContent}
-            onChange={(e) => setChapterContent(e.target.value)}
-            required
-            className="w-full bg-primary border border-border rounded-md px-3 py-2 focus:ring-accent focus:border-accent font-mono text-sm"
-            placeholder="## My First Heading..."
-          />
+            <FileText size={16} /> Create New Guide
+          </Tabs.Trigger>
+        </Tabs.List>
+
+        <div className="bg-card-bg p-6 md:p-8 rounded-lg border-2 border-border">
+          <Tabs.Content value="addChapter">
+            <div className="mb-6">
+              <label
+                htmlFor="yearFilter"
+                className="block text-sm font-medium text-muted-accent mb-2"
+              >
+                Filter by Year
+              </label>
+              <select
+                id="yearFilter"
+                value={filterYear}
+                onChange={(e) => setFilterYear(e.target.value)}
+                className="w-full mt-1 bg-primary border-2 border-border rounded-md px-3 py-2 text-text"
+              >
+                <option value="1">L1</option>
+                <option value="2">L2</option>
+                <option value="3">L3</option>
+                <option value="4">M1</option>
+                <option value="5">M2</option>
+              </select>
+            </div>
+            {/* We pass the filtered list down to the form component */}
+            <AddChapterForm subjectsForYear={filteredSubjects} />
+          </Tabs.Content>
+
+          <Tabs.Content value="newSubject">
+            <CreateSubjectForm />
+          </Tabs.Content>
+
+          <Tabs.Content value="newGuide">
+            <div className="text-center text-muted-accent p-8">
+              <p>Guide creation form coming soon!</p>
+            </div>
+          </Tabs.Content>
         </div>
-
-        {/* --- Submission Button & Status --- */}
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full px-4 py-3 font-semibold text-primary bg-accent rounded-md hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isLoading ? "Submitting..." : "Create Subject & Chapter"}
-        </button>
-
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-        {success && (
-          <p className="text-green-500 text-sm text-center">{success}</p>
-        )}
-      </form>
+      </Tabs.Root>
     </div>
   );
 }

@@ -1,0 +1,32 @@
+@startuml AdminViewsDashboard
+' --- DIAGRAM METADATA ---
+title "Sequence Diagram: Admin Views the Review Dashboard"
+
+' --- PARTICIPANTS ---
+actor Admin
+participant "Frontend (Next.js)" as Frontend
+participant "Backend (FastAPI)" as Backend
+
+' --- INITIAL STATE ---
+ref over Admin, Frontend, Backend : Admin is authenticated and has navigated to '/admin/manage'
+
+' --- FLOW OF EVENTS ---
+Admin -> Frontend: Lands on the Admin Management Page
+activate Frontend
+
+Frontend -> Backend: GET /contributions/review-queue
+activate Backend
+
+Backend -> Backend: Calls multiple crud functions: \n - get_pending_modification_requests() \n - get_unpublished_chapters() \n - get_unpublished_exams() \n - get_unpublished_resources()
+note right of Backend: Backend aggregates and sorts all items into a single, unified list.
+
+Backend --> Frontend: 200 OK [ReviewQueueResponse]
+deactivate Backend
+
+Frontend --> Admin: Renders the dashboard with all pending items, categorized and listed in tables.
+deactivate Frontend
+
+' --- LINK TO NEXT JOURNEY ---
+ref over Admin, Frontend, Backend : The Admin can now select any item to begin the review process.
+
+@enduml

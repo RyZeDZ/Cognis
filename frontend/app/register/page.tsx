@@ -1,3 +1,5 @@
+// frontend/app/register/page.tsx
+
 "use client";
 
 import { useState } from "react";
@@ -8,6 +10,7 @@ import { useAuthStore } from "@/store/authStore";
 import { useRedirectIfAuthenticated } from "@/hooks/useRedirectIfAuthenticated";
 import Cookies from "js-cookie";
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
+import { type FastAPIValidationError } from "@/types";
 
 const GoogleIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 48 48">
@@ -34,26 +37,24 @@ export default function RegisterPage() {
   const { isLoading: isAuthLoading, isAuthenticated } =
     useRedirectIfAuthenticated();
   const router = useRouter();
+  const setUser = useAuthStore((state) => state.setUser);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const setUser = useAuthStore((state) => state.setUser);
 
   const handleGoogleSuccess = async (
     credentialResponse: CredentialResponse
   ) => {
     setIsLoading(true);
     setError(null);
-
     const idToken = credentialResponse.credential;
     if (!idToken) {
-      setError("Google login failed: No ID token received.");
+      setError("Google signup failed: No ID token received.");
       setIsLoading(false);
       return;
     }
-
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       const response = await fetch(`${apiUrl}/api/auth/google/verify`, {
@@ -61,15 +62,12 @@ export default function RegisterPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token: idToken }),
       });
-
       const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.detail || "Google Sign-In failed.");
-      }
-
+      if (!response.ok)
+        throw new Error(data.detail || "Google Sign-Up failed.");
       Cookies.set("access_token", data.access_token, {
         expires: 7,
-        secure: false,
+        secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
       });
       setUser(data.user);
@@ -78,15 +76,11 @@ export default function RegisterPage() {
       setError(
         err instanceof Error
           ? err.message
-          : "An error occurred during Google Sign-In."
+          : "An error occurred during Google Sign-Up."
       );
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleGoogleError = () => {
-    setError("Google login failed. Please try again.");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -109,7 +103,7 @@ export default function RegisterPage() {
       if (!response.ok) {
         if (data.detail && Array.isArray(data.detail)) {
           const errorMessages = data.detail
-            .map((err: any) => `${err.loc[1]}: ${err.msg}`)
+            .map((err: FastAPIValidationError) => `${err.loc[1]}: ${err.msg}`)
             .join(", ");
           throw new Error(errorMessages);
         } else {
@@ -223,16 +217,21 @@ export default function RegisterPage() {
             <div className="flex-grow border-t border-border"></div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4">
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={handleGoogleError}
-              theme="outline"
-              size="large"
-              shape="rectangular"
-              width="100%"
-              logo_alignment="left"
-            />
+          <div className="relative w-full">
+            <div className="w-full flex items-center justify-center gap-2 px-4 py-2 font-semibold text-text bg-card-bg rounded-md border-2 border-border">
+              <GoogleIcon /> Continue with Google
+            </div>
+            <div className="absolute top-0 left-0 w-full h-full opacity-0 overflow-hidden cursor-pointer">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() =>
+                  setError("Google signup failed. Please try again.")
+                }
+                theme="outline"
+                size="large"
+                shape="rectangular"
+              />
+            </div>
           </div>
 
           <p className="text-center text-sm text-muted-accent pt-2">

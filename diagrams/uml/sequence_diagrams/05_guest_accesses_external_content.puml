@@ -1,0 +1,41 @@
+@startuml GuestAccessesExternalContent
+' --- DIAGRAM METADATA ---
+title "Sequence Diagram: Guest Accesses an Exam or Resource"
+
+' --- PARTICIPANTS ---
+actor Guest
+participant "Frontend (Next.js)" as Frontend
+participant "Supabase Storage" as Supabase
+participant "External Website" as ExternalWebsite
+
+' --- INITIAL STATE ---
+ref over Guest, Frontend, Supabase, ExternalWebsite : Guest is on the Subject Detail page
+
+' --- FLOW OF EVENTS ---
+
+alt Guest clicks on an Exam link
+    Guest -> Frontend: Clicks "EXAM.pdf"
+    activate Frontend
+    
+    Frontend --> Guest: Opens Supabase URL in a new tab
+    deactivate Frontend
+    
+    Guest -> Supabase: Browser requests the PDF file
+    activate Supabase
+    Supabase --> Guest: Serves the PDF file
+    deactivate Supabase
+    
+else Guest clicks on a Resource link
+    Guest -> Frontend: Clicks "Helpful Article" link
+    activate Frontend
+    
+    Frontend --> Guest: Opens external URL in a new tab
+    deactivate Frontend
+    
+    Guest -> ExternalWebsite: Browser navigates to the resource
+    activate ExternalWebsite
+    ExternalWebsite --> Guest: Serves the website content
+    deactivate ExternalWebsite
+end
+
+@enduml

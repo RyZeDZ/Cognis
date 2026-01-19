@@ -1,0 +1,46 @@
+@startuml UserSubmitsExam
+' --- DIAGRAM METADATA ---
+title "Sequence Diagram: User Submits a New Exam"
+
+' --- PARTICIPANTS ---
+actor User
+participant "Frontend (Next.js)" as Frontend
+participant "Supabase Storage" as Supabase
+participant "Backend (FastAPI)" as Backend
+
+' --- INITIAL STATE ---
+ref over User, Frontend, Supabase, Backend : User is on the Subject Detail page and authenticated.
+
+' --- FLOW OF EVENTS ---
+User -> Frontend: Clicks "Add Content" button
+activate Frontend
+Frontend --> User: Opens "AddContentModal.tsx"
+
+User -> Frontend: Selects "Suggest a new exam"
+Frontend --> User: Displays Exam Submission Form (title, file input)
+
+User -> Frontend: Enters Title and selects a PDF file to upload.
+Frontend -> Supabase: Uploads PDF file to 'cognis-images' bucket
+note right of Frontend: This happens client-side directly to Supabase.
+activate Supabase
+Supabase --> Frontend: Returns the public URL of the uploaded file.
+deactivate Supabase
+
+User -> Frontend: Clicks "Submit for Review" button
+Frontend -> Backend: POST /subjects/{subjectId}/suggest-exam \n { title: "...", file_url: "..." }
+note right of Frontend: Auth token with user_id is sent automatically.
+activate Backend
+
+Backend -> Backend: Calls crud.create_exam_submission(data, subject_id, user_id)
+note right of Backend: Creates an Exam record with status = 'pending'.
+
+Backend --> Frontend: 201 Created [New Exam Object]
+deactivate Backend
+
+Frontend --> User: Shows "Submission successful!" message and closes modal.
+deactivate Frontend
+
+' --- LINK TO NEXT JOURNEY ---
+ref over User, Frontend, Supabase, Backend : The new exam is now in the review queue for an Admin.
+
+@enduml

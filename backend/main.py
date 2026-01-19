@@ -3,7 +3,16 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import models
 from database import engine
-from api.endpoints import subjects, users, auth, utils
+from api.endpoints import (
+    subjects,
+    users,
+    auth,
+    utils,
+    chapters,
+    contributions,
+    notifications,
+    admin,
+)
 
 app = FastAPI(title="Cognis API")
 
@@ -22,9 +31,17 @@ app.add_middleware(
 )
 
 app.include_router(subjects.router, prefix="/api/subjects", tags=["Subjects"])
+app.include_router(chapters.router, prefix="/api/chapters", tags=["Chapters"])
 app.include_router(users.router, prefix="/api/users", tags=["Users"])
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(utils.router, prefix="/api/utils", tags=["Utils"])
+app.include_router(
+    contributions.router, prefix="/api/contributions", tags=["Contributions"]
+)
+app.include_router(
+    notifications.router, prefix="/api/notifications", tags=["Notifications"]
+)
+app.include_router(admin.router, prefix="/api/admin", tags=["Admin"])
 
 
 @app.get("/")

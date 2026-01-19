@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+@plugin "tailwind-scrollbar";
 
 @theme {
   --color-primary: #0a0f14;
@@ -12,4 +13,44 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: var(--color-primary);
+}
+
+html::-webkit-scrollbar {
+  width: 8px;
+}
+html::-webkit-scrollbar-track {
+  background: var(--color-primary);
+}
+html::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 5px;
+  border: 2px solid var(--color-primary);
+}
+html::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-accent);
+}
+
+body {
+  color: var(--color-text);
+}
+
+.diff-container {
+  background-color: var(--color-primary);
+}
+.diff-container .diff-gutter {
+  background-color: var(--color-card-bg);
+}
+.diff-container .diff-gutter-insert,
+.diff-container .diff-code-insert {
+  background-color: rgba(6, 78, 59, 0.5); /* A darker, more transparent green */
+}
+.diff-container .diff-gutter-delete,
+.diff-container .diff-code-delete {
+  background-color: rgba(127, 29, 29, 0.5); /* A darker, more transparent red */
+}
+/* This is the key fix for invisible text */
+.diff-container .diff-code-insert .token,
+.diff-container .diff-code-delete .token {
+  color: var(--color-text) !important;
 }

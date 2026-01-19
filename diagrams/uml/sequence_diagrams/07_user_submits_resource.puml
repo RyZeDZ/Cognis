@@ -1,0 +1,38 @@
+@startuml UserSubmitsResource
+' --- DIAGRAM METADATA ---
+title "Sequence Diagram: User Submits a New Resource"
+
+' --- PARTICIPANTS ---
+actor User
+participant "Frontend (Next.js)" as Frontend
+participant "Backend (FastAPI)" as Backend
+
+' --- INITIAL STATE ---
+ref over User, Frontend, Backend : User is on the Subject Detail page and authenticated.
+
+' --- FLOW OF EVENTS ---
+User -> Frontend: Clicks "Add Content", then selects "Suggest a new resource"
+activate Frontend
+Frontend --> User: Displays Resource Submission Form (title, link_url, description)
+
+User -> Frontend: Fills in the form fields.
+User -> Frontend: Clicks "Submit for Review" button
+activate Frontend
+
+Frontend -> Backend: POST /subjects/{subjectId}/suggest-resource \n { title: "...", link_url: "...", description: "..." }
+note right of Frontend: Auth token with user_id is sent automatically.
+activate Backend
+
+Backend -> Backend: Calls crud.create_resource_submission(data, subject_id, user_id)
+note right of Backend: Creates a Resource record with status = 'pending'.
+
+Backend --> Frontend: 201 Created [New Resource Object]
+deactivate Backend
+
+Frontend --> User: Shows "Submission successful!" message and closes modal.
+deactivate Frontend
+
+' --- LINK TO NEXT JOURNEY ---
+ref over User, Frontend, Backend : The new resource is now in the review queue for an Admin.
+
+@enduml

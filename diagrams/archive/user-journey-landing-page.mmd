@@ -1,0 +1,24 @@
+sequenceDiagram
+    participant Guest as Guest (User)
+    participant Frontend as Next.js App
+    participant Backend as FastAPI API
+
+    Guest->>Frontend: Navigates to Home Page (/)
+
+    par Auth Check and Initial Data Load
+        Frontend->>Backend: GET /api/users/me
+        alt User is NOT Authenticated (Guest)
+            Backend-->>Frontend: Returns 401 Unauthorized
+        else User IS Authenticated
+            Backend-->>Frontend: Returns User object { id, username, ... }
+        end
+    and
+        Frontend->>Backend: GET /api/subjects/top
+        Backend-->>Frontend: Returns list of top subjects
+    and
+        Frontend->>Backend: GET /api/guides/top
+        Backend-->>Frontend: Returns list of top guides
+    end
+
+    Frontend-->>Guest: Renders the full Home Page
+    Note over Frontend, Guest: Navbar shows "Auth" & "Profile" buttons. <br/> Page displays top subjects and top guides.

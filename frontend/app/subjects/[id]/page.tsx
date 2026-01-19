@@ -1,41 +1,83 @@
+// frontend/app/subjects/[id]/page.tsx
+
+"use client";
+
+import { useState, useEffect, use } from "react";
+import { useAuthStore } from "@/store/authStore";
 import type { Subject } from "@/types";
 import { formatYear } from "@/lib/utils";
 import Link from "next/link";
-import { BookCopy, FileText, Wrench, ArrowLeft } from "lucide-react";
+import {
+  BookCopy,
+  FileText,
+  Wrench,
+  Loader2,
+  ArrowLeft,
+  PlusCircle,
+} from "lucide-react";
 import { notFound } from "next/navigation";
+import AddContentModal from "./components/AddContentModal";
 
-async function getSubjectDetails(id: string): Promise<Subject | null> {
-  try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    const res = await fetch(`${apiUrl}/api/subjects/${id}`);
-
-    if (res.status === 404) {
-      return null;
-    }
-
-    if (!res.ok) {
-      throw new Error("Failed to fetch subject details");
-    }
-    return res.json();
-  } catch (error) {
-    console.error("Error fetching subject details:", error);
-    return null;
-  }
-}
-
-export default async function SubjectLandingPage({
+export default function SubjectLandingPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const subject = await getSubjectDetails((await params).id);
+  const { id } = use(params);
+  const { isAuthenticated } = useAuthStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [subject, setSubject] = useState<Subject | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDetailsAndTrackVisit = async () => {
+      setIsLoading(true);
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const res = await fetch(`${apiUrl}/api/subjects/${id}`);
+        if (!res.ok) {
+          notFound();
+          return;
+        }
+        const subjectData = await res.json();
+        setSubject(subjectData);
+
+        await fetch(`${apiUrl}/api/utils/track-visit/subject/${id}`, {
+          method: "POST",
+        });
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchDetailsAndTrackVisit();
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
+        <Loader2 className="h-12 w-12 animate-spin text-accent" />
+      </div>
+    );
+  }
 
   if (!subject) {
-    notFound();
+    return notFound();
   }
+
+  // Destructure for easier access
+  const { chapters, exams, resources } = subject;
 
   return (
     <div className="container mx-auto px-4 py-12 md:px-6 lg:px-8">
+      <AddContentModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        subjectId={parseInt(id)}
+      />
+
       <Link
         href="/#subjects"
         className="inline-flex items-center gap-2 text-muted-accent hover:text-accent mb-8 transition-colors"
@@ -43,62 +85,106 @@ export default async function SubjectLandingPage({
         <ArrowLeft size={16} />
         Back to all subjects
       </Link>
-      {/* Page Header */}
-      <div className="mb-12 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-text">
-          {subject.name}
-        </h1>
-        <p className="mt-2 text-lg text-muted-accent">
-          {formatYear(subject.year)}{" "}
-          {subject.specialization && subject.specialization !== "Common"
-            ? ` - ${subject.specialization}`
-            : ""}
-        </p>
+
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-12">
+        <div className="text-left">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-text">
+            {subject.name}
+          </h1>
+          <p className="mt-2 text-lg text-muted-accent">
+            {formatYear(subject.year)}{" "}
+            {subject.specialization && subject.specialization !== "Common"
+              ? ` - ${subject.specialization}`
+              : ""}
+          </p>
+        </div>
+        {isAuthenticated && (
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex-shrink-0 flex items-center gap-2 px-4 py-2 bg-accent text-primary rounded-md font-semibold hover:opacity-90 transition-opacity"
+          >
+            <PlusCircle size={18} /> Add Content
+          </button>
+        )}
       </div>
 
-      {/* Navigation Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Card 1: Chapters - NEW DESIGN */}
-        <div className="flex flex-col p-6 bg-card-bg border border-border rounded-lg">
+        <div className="flex flex-col p-6 bg-card-bg border-2 border-border rounded-lg">
           <div className="flex items-center gap-3 mb-4">
             <BookCopy className="h-8 w-8 text-accent" />
             <h2 className="text-2xl font-semibold text-text">Chapters</h2>
           </div>
-          <ul className="md:text-sm space-y-2 flex-grow">
-            {subject.chapters.map((chapter) => (
-              <li key={chapter.id}>
-                <Link
-                  href={`/subjects/${subject.id}/chapters/${chapter.id}`}
-                  className="text-muted-accent hover:text-accent hover:underline transition-colors"
-                >
-                  {chapter.title}
-                </Link>
+          <ul className="space-y-2 flex-grow">
+            {chapters?.length > 0 ? (
+              chapters.map((chapter) => (
+                <li key={chapter.id}>
+                  <Link
+                    href={`/subjects/${subject.id}/chapters/${chapter.id}`}
+                    className="text-muted-accent hover:text-accent hover:underline transition-colors"
+                  >
+                    {chapter.title}
+                  </Link>
+                </li>
+              ))
+            ) : (
+              <li className="text-muted-accent text-sm">
+                No chapters available yet.
               </li>
-            ))}
+            )}
           </ul>
         </div>
-
-        {/* Card 2: Past Exams - NEW DESIGN */}
-        <div className="flex flex-col p-6 bg-card-bg border border-border rounded-lg">
+        <div className="flex flex-col p-6 bg-card-bg border-2 border-border rounded-lg">
           <div className="flex items-center gap-3 mb-4">
             <FileText className="h-8 w-8 text-accent" />
             <h2 className="text-2xl font-semibold text-text">Past Exams</h2>
           </div>
-          <ul className="md:text-sm space-y-2 flex-grow">
-            <li className="text-muted-accent">Coming Soon...</li>
+          <ul className="space-y-2 flex-grow">
+            {exams?.length > 0 ? (
+              exams.map((exam) => (
+                <li key={exam.id}>
+                  <a
+                    href={exam.file_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-accent hover:text-accent hover:underline transition-colors"
+                  >
+                    {exam.title}
+                  </a>
+                </li>
+              ))
+            ) : (
+              <li className="text-muted-accent text-sm">
+                No exams available yet.
+              </li>
+            )}
           </ul>
         </div>
-
-        {/* Card 3: Tools & Resources - NEW DESIGN */}
-        <div className="flex flex-col p-6 bg-card-bg border border-border rounded-lg">
+        <div className="flex flex-col p-6 bg-card-bg border-2 border-border rounded-lg">
           <div className="flex items-center gap-3 mb-4">
             <Wrench className="h-8 w-8 text-accent" />
             <h2 className="text-2xl font-semibold text-text">
               Tools & Resources
             </h2>
           </div>
-          <ul className="md:text-sm space-y-2 flex-grow">
-            <li className="text-muted-accent">Coming Soon...</li>
+          <ul className="space-y-2 flex-grow">
+            {resources?.length > 0 ? (
+              resources.map((resource) => (
+                <li key={resource.id}>
+                  <a
+                    href={resource.link_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-accent hover:text-accent hover:underline transition-colors"
+                  >
+                    {resource.title}
+                  </a>
+                </li>
+              ))
+            ) : (
+              <li className="text-muted-accent text-sm">
+                No resources available yet.
+              </li>
+            )}
           </ul>
         </div>
       </div>
