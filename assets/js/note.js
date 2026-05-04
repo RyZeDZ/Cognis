@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-
     const params = new URLSearchParams(window.location.search);
     const noteFile = params.get("file");
     const subject = params.get("subject");
@@ -13,11 +12,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const md = window.markdownit();
 
+    const defaultImageRender = md.renderer.rules.image || function(tokens, idx, options, env, self) {
+        return self.renderToken(tokens, idx, options);
+    };
+
+    md.renderer.rules.image = function(tokens, idx, options, env, self) {
+        const token = tokens[idx];
+        const srcIndex = token.attrIndex('src');
+        const src = token.attrs[srcIndex][1];
+
+        if (!src.startsWith('http') && !src.startsWith('/')) {
+            token.attrs[srcIndex][1] = `/Cognis/assets/notes/${subject}/${src}`;
+        }
+
+        return defaultImageRender(tokens, idx, options, env, self);
+    };
+
     fetch(`../assets/notes/${subject}/${noteFile}`)
         .then(response => {
-            if (!response.ok) {
-                throw new Error("File not found");
-            }
+            if (!response.ok) throw new Error("File not found");
             return response.text();
         })
         .then(markdown => {
@@ -27,9 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
             hljs.highlightAll();
             requestAnimationFrame(() => {
                 MathJax.typesetClear();
-                MathJax.typesetPromise().catch(err => {
-                    console.log('MathJax typeset error:', err);
-                });
+                MathJax.typesetPromise().catch(err => console.log('MathJax typeset error:', err));
             });
         })
         .catch(error => {
