@@ -30,7 +30,7 @@ Networks are categorized based on their physical size and coverage:
 - **Pros**: Guaranteed delivery, ordered packets.  
 - **Cons**: Higher latency due to setup/teardown.  
 
-![Handshake.png](./images/Handshake-illustration.png)
+![Handshake.png](https://ryzedz.github.io/Cognis/assets/notes/images/Handshake-illustration.png)
 
 ### 2.2 Connectionless Service  
 - **Definition**: No pre-established path; packets routed independently.  
