@@ -14,7 +14,7 @@ A **grammar** is a formal system for generating all valid strings (words) in a l
 - This grammar generates words like $ab$, $aabb$, $aaabbb$, etc.  
 
 **Key Properties**:  
-![Grammar.png](/assets/notes/LT/images/Grammar-definition.png)
+![Grammar.png](images/Grammar-definition.png)
 - $V_T \cup V_N = V$
 - $V_T \cap V_N = \emptyset$ (terminals and non-terminals are disjoint).
 - The notation $\alpha \rightarrow \beta$ is called a derivation ($\alpha$ is a left member and $\beta$ is a right member). 
