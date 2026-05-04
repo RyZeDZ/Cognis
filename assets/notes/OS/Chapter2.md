@@ -15,7 +15,7 @@ UNIX has **4 layers**:
 4. **Utilities**:  
    - Programs like `gcc`, `vi`, `make`.  
 
-![Unix architecture](/assets/notes/OS/images/UNIX-architecture.png)  
+![Unix architecture](images/UNIX-architecture.png)  
 
 ## 2. UNIX Files  
 ### 2.1. File System Organization  
@@ -25,7 +25,7 @@ UNIX has **4 layers**:
     - `.`: Current directory.  
     - `..`: Parent directory.  
     
-![Unix File System](/assets/notes/OS/images/Unix-File-System.png)
+![Unix File System](images/Unix-File-System.png)
 [Source: GeekForGeeks](https://www.geeksforgeeks.org/unix-file-system/)
 
 
@@ -54,7 +54,7 @@ $ ls -l
 -rwxr--r-- 1 ryze cognis 4096 May 28 08:30 file.txt  
 ```
 *Note: The command `ls` lists the files/folders in the current working directory. The `-l` flag shows the permissions for each file/folder.*
-![Filesystem.png](/assets/notes/OS/images/Unix-File-System-Illustration.png)
+![Filesystem.png](images/Unix-File-System-Illustration.png)
 
 **Explanation**:  
 
