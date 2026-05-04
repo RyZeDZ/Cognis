@@ -30,7 +30,7 @@ Networks are categorized based on their physical size and coverage:
 - **Pros**: Guaranteed delivery, ordered packets.  
 - **Cons**: Higher latency due to setup/teardown.  
 
-![Handshake.png](/assets/notes/CN/images/Handshake-illustration.png)
+![Handshake.png](images/Handshake-illustration.png)
 
 ### 2.2 Connectionless Service  
 - **Definition**: No pre-established path; packets routed independently.  
@@ -58,8 +58,8 @@ Networks are categorized based on their physical size and coverage:
 - **Pros**: Low cost, simple setup.  
 - **Cons**: Limited scalability, collision risks (requires arbitration).  
 
-![RingTopology.png](/assets/notes/CN/images/ring-topology.png)
-![BusTopology.png](/assets/notes/CN/images/bus-topology.png)
+![RingTopology.png](images/ring-topology.png)
+![BusTopology.png](images/bus-topology.png)
 
 
 ### 3.2 Point-to-Point Networks
@@ -73,7 +73,7 @@ Networks are categorized based on their physical size and coverage:
 - **Cons**: Expensive (requires routers/switches).
 
   
-![P2PTopology.png](/assets/notes/CN/images/ptp-topology.png)
+![P2PTopology.png](images/ptp-topology.png)
 
 ## 4. Point-to-Point Network Architectures
 
